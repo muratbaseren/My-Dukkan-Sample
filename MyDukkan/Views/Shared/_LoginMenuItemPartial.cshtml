@@ -1,0 +1,32 @@
+﻿@using MyDukkan.Models
+
+<ul class="nav navbar-nav navbar-right">
+    @if (Session["login"] != null)
+    {
+        var username = (Session["login"] as SysUser).Username;
+
+        <li>
+            <a href="/Login/UserProfile">
+                <span class="glyphicon glyphicon-user">&nbsp;</span>@username
+            </a>
+        </li>
+        <li>
+            <a href="/Login/SignOut">
+                <span class="glyphicon glyphicon-log-out">&nbsp;</span>Logout
+            </a>
+        </li>
+    }
+    else
+    {
+        <li>
+            <a href="/Login/SignIn" role="button" data-toggle="modal" data-target="#login-modal">
+                <span class="glyphicon glyphicon-log-in">&nbsp;</span>Sign In
+            </a>
+        </li>
+        <li>
+            <a href="/Login/SignUp" role="button" data-toggle="modal" data-target="#login-modal">
+                <span class="glyphicon glyphicon-user">&nbsp;</span>Sign Up
+            </a>
+        </li>
+    }
+</ul>

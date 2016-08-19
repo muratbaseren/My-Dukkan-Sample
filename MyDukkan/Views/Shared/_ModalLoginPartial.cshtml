@@ -19,9 +19,9 @@
                     <!-- Begin # Login Form -->
                     <form id="login-form" action="/ModalLogin/SignIn" method="post">
                         <div class="modal-body">
-                            <div id="div-login-msg">
-                                <div id="icon-login-msg" class="glyphicon glyphicon-chevron-right"></div>
-                                <span id="text-login-msg">Lutfen giris yapiniz.</span>
+                            <div id="div-login-msg @msg.LoginColor">
+                                <div id="icon-login-msg" class="glyphicon @msg.LoginIcon"></div>
+                                <span id="text-login-msg">@msg.LoginText</span>
                             </div>
                             <input id="login_username" name="login_username" class="form-control" type="text" placeholder="Kullanici adi" required>
                             <input id="login_password" name="login_username" class="form-control" type="password" placeholder="Sifre" required>
@@ -33,7 +33,7 @@
                         </div>
                         <div class="modal-footer">
                             <div>
-                                <button id="login_submit_btn" type="submit" class="btn btn-primary btn-lg btn-block">Giris</button>
+                                <button type="submit" class="btn btn-primary btn-lg btn-block">Giriþ</button>
                             </div>
                             <div>
                                 <button id="login_lost_btn" type="button" class="btn btn-link">Sifremi unuttum?</button>
@@ -53,7 +53,7 @@
                         </div>
                         <div class="modal-footer">
                             <div>
-                                <button id="lost_submit_btn" type="submit" class="btn btn-primary btn-lg btn-block">Gonder</button>
+                                <button type="submit" class="btn btn-primary btn-lg btn-block">Gönder</button>
                             </div>
                             <div>
                                 <button id="lost_login_btn" type="button" class="btn btn-link">Giris</button>
@@ -65,9 +65,9 @@
                     <!-- Begin | Register Form -->
                     <form id="register-form" style="display:none;" action="/ModalLogin/SignUp" method="post">
                         <div class="modal-body">
-                            <div id="div-register-msg">
-                                <div id="icon-register-msg" class="glyphicon glyphicon-chevron-right"></div>
-                                <span id="text-register-msg">Yeni hesap olusturunuz.</span>
+                            <div id="div-register-msg @msg.RegisterColor">
+                                <div id="icon-register-msg" class="glyphicon @msg.RegisterIcon"></div>
+                                <span id="text-register-msg">@msg.RegisterText</span>
                             </div>
                             <input id="register_username" name="register_username" class="form-control" type="text" placeholder="Kullanici adi" required>
                             <input id="register_email" name="register_email" class="form-control" type="text" placeholder="E-Posta adresi" required>
@@ -75,7 +75,7 @@
                         </div>
                         <div class="modal-footer">
                             <div>
-                                <button id="register_submit_btn" type="submit" class="btn btn-primary btn-lg btn-block">Kayit</button>
+                                <button type="submit" class="btn btn-primary btn-lg btn-block">Kayýt</button>
                             </div>
                             <div>
                                 <button id="register_login_btn" type="button" class="btn btn-link">Giris</button>

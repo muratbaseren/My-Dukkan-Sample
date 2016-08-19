@@ -7,6 +7,8 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery-2.2.4.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
 <body>
@@ -32,7 +34,7 @@
                         <a href="/Home/Mesaj">İletişim</a>
                     </li>
                 </ul>
-                @Html.Partial("_LoginMenuItemPartial")
+                @Html.Partial("_ModalLoginMenuItemPartial")
             </div>
         </div>
     </div>
@@ -45,10 +47,7 @@
         </footer>
     </div>
 
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
-
-    @Html.Partial("_LoginPartial")
+    @Html.Partial("_ModalLoginPartial")
 </body>
 
 </html>

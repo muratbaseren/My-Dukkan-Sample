@@ -8,7 +8,7 @@
    #
    ##################################################################### */
 
-document.onload = function () {
+$(function () {
 
     var $formLogin = $('#login-form');
     var $formLost = $('#lost-form');
@@ -23,36 +23,90 @@ document.onload = function () {
             case "login-form":
                 var $lg_username = $('#login_username').val();
                 var $lg_password = $('#login_password').val();
-                if ($lg_username == "ERROR") {
-                    msgChange($('#div-login-msg'), $('#icon-login-msg'), $('#text-login-msg'), "error", "glyphicon-remove", "Login error");
-                } else {
-                    msgChange($('#div-login-msg'), $('#icon-login-msg'), $('#text-login-msg'), "success", "glyphicon-ok", "Login OK");
+                var $lg_rememberme = false;
+
+                if ($('#login_rememberme').val() == "on") {
+                    $lg_rememberme = true;
                 }
+
+                $.ajax({
+                    method: "post",
+                    url: "/ModalLogin/SignIn",
+                    data: { login_username: $lg_username, login_password: $lg_password, login_rememberme: $lg_rememberme }
+                }).done(function (res) {
+                    if (res.HasError) {
+                        msgChange($('#div-login-msg'), $('#icon-login-msg'), $('#text-login-msg'), "error", "glyphicon-remove", res.Message);
+
+                        $('#login_username').val("");
+                        $('#login_password').val("");
+                    }
+                    else {
+                        msgChange($('#div-login-msg'), $('#icon-login-msg'), $('#text-login-msg'), "success", "glyphicon-ok", res.Message);
+
+                        $("#login_submit_btn").attr("disabled", "disabled");
+
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    }
+                });
+
                 return false;
                 break;
             case "lost-form":
                 var $ls_email = $('#lost_email').val();
-                if ($ls_email == "ERROR") {
-                    msgChange($('#div-lost-msg'), $('#icon-lost-msg'), $('#text-lost-msg'), "error", "glyphicon-remove", "Send error");
-                } else {
-                    msgChange($('#div-lost-msg'), $('#icon-lost-msg'), $('#text-lost-msg'), "success", "glyphicon-ok", "Send OK");
-                }
+
+                $.ajax({
+                    method: "post",
+                    url: "/ModalLogin/LostPassword",
+                    data: { lost_email: $ls_email }
+                }).done(function (res) {
+                    if (res.HasError) {
+                        msgChange($('#div-lost-msg'), $('#icon-lost-msg'), $('#text-lost-msg'), "error", "glyphicon-remove", res.Message);
+
+                        $('#lost_email').val("");
+                    }
+                    else {
+                        msgChange($('#div-lost-msg'), $('#icon-lost-msg'), $('#text-lost-msg'), "success", "glyphicon-ok", res.Message);
+                    }
+                });
+
                 return false;
                 break;
             case "register-form":
                 var $rg_username = $('#register_username').val();
                 var $rg_email = $('#register_email').val();
                 var $rg_password = $('#register_password').val();
-                if ($rg_username == "ERROR") {
-                    msgChange($('#div-register-msg'), $('#icon-register-msg'), $('#text-register-msg'), "error", "glyphicon-remove", "Register error");
-                } else {
-                    msgChange($('#div-register-msg'), $('#icon-register-msg'), $('#text-register-msg'), "success", "glyphicon-ok", "Register OK");
-                }
+
+                $.ajax({
+                    method: "post",
+                    url: "/ModalLogin/SignUp",
+                    data: { register_username: $rg_username, register_email: $rg_email, register_password: $rg_password }
+                }).done(function (res) {
+                    if (res.HasError) {
+                        msgChange($('#div-register-msg'), $('#icon-register-msg'), $('#text-register-msg'), "error", "glyphicon-remove", res.Message);
+
+                        $('#register_username').val("");
+                        $('#register_email').val("");
+                        $('#register_password').val("");
+                    }
+                    else {
+                        msgChange($('#div-register-msg'), $('#icon-register-msg'), $('#text-register-msg'), "success", "glyphicon-ok", res.Message);
+
+                        $("#register_submit_btn").attr("disabled", "disabled");
+
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    }
+                });
+
                 return false;
                 break;
             default:
                 return false;
         }
+
         return false;
     });
 
@@ -93,4 +147,4 @@ document.onload = function () {
             $iconTag.removeClass($iconClass + " " + $divClass);
         }, $msgShowTime);
     }
-};
+});

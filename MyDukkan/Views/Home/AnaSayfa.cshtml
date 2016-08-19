@@ -1,4 +1,9 @@
-﻿
+﻿@using MyDukkan
+@using MyDukkan.Models
+
+@model AnaSayfaViewModel
+
+
 <link href="~/shop-home/css/shop-homepage.css" rel="stylesheet" />
 
 <!-- Page Content -->
@@ -7,9 +12,18 @@
         <div class="col-md-3">
             <p class="lead">Shop Name</p>
             <div class="list-group">
-                <a href="#" class="list-group-item">Category 1</a>
-                <a href="#" class="list-group-item">Category 2</a>
-                <a href="#" class="list-group-item">Category 3</a>
+
+                <a href="/Home/AnaSayfa" class="list-group-item">
+                    <b>Tümü</b>
+                </a>
+
+                @foreach (Categories cat in Model.CategoryList)
+                {
+                    <a href="/Home/AnaSayfaByCat/@cat.Id" class="list-group-item">
+                        @cat.Name
+                    </a>
+                }
+
             </div>
         </div>
         <div class="col-md-9">
@@ -43,30 +57,37 @@
             </div>
             <div class="row">
 
-                <div class="col-sm-4 col-lg-4 col-md-4">
-                    <div class="thumbnail">
-                        <img src="http://placehold.it/320x150" alt="">
-                        <div class="caption">
-                            <h4 class="pull-right">$24.99</h4>
-                            <h4>
-                                <a href="#">First Product</a>
-                            </h4>
-                            <p>
-                                Tincidunt integer eu augue augue nunc elit dolor, luctus placerat scelerisque euismod, iaculis.
-                            </p>
-                        </div>
-                        <div class="ratings">
-                            <p class="pull-right">15 yorum</p>
-                            <p>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                            </p>
+                @foreach (Products pro in Model.ProductList)
+                {
+                    <div class="col-sm-4 col-lg-4 col-md-4">
+                        <div class="thumbnail">
+                            <img src="http://placehold.it/320x150" alt="">
+                            <div class="caption">
+                                <h4 class="pull-right">@pro.Price TL</h4>
+                                <h4>
+                                    <a href="/Home/UrunDetay/@pro.Id">@pro.Name</a>
+                                </h4>
+                                <p>
+                                    @pro.Summary
+                                </p>
+                            </div>
+                            <div class="ratings">
+                                <p class="pull-right">@pro.Comments.Count yorum</p>
+                                <p>
+                                    @for (int i = 0; i < pro.StarCount; i++)
+                                    {
+                                        <span class="glyphicon glyphicon-star"></span>
+                                    }
+
+                                    @for (int i = 0; i < 5 - pro.StarCount; i++)
+                                    {
+                                        <span class="glyphicon glyphicon-star-empty"></span>
+                                    }
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
 
             </div>
         </div>

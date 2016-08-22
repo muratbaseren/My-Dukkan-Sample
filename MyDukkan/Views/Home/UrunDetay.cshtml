@@ -1,68 +1,96 @@
+@using MyDukkan.Models
+@model UrunDetayViewModel
+
 <!-- Buraya CSS referansları ekleyebilirsiniz. -->
 <link href="~/shop-item/css/shop-item.css" rel="stylesheet" />
 
-    <!-- Page Content -->
+<!-- Page Content -->
 <div class="container">
     <div class="row">
         <div class="col-md-3">
-            <p class="lead">Shop Name</p>
+            <p class="lead">Kategoriler</p>
             <div class="list-group">
-                <a href="#" class="list-group-item active">Category 1</a>
-                <a href="#" class="list-group-item">Category 2</a>
-                <a href="#" class="list-group-item">Category 3</a>
+                @foreach (Categories cat in Model.CategoryList)
+                {
+                    string active = "";
+
+                    if (cat.Id == Model.Product.Categories.Id)
+                    {
+                        active = "active";
+                    }
+
+                    <a href="/Home/AnaSayfaByCat/@cat.Id"
+                       class="list-group-item @active">@cat.Name</a>
+                }
             </div>
         </div>
         <div class="col-md-9">
             <div class="thumbnail">
                 <img class="img-responsive" src="http://placehold.it/800x300" alt="">
                 <div class="caption-full">
-                    <h4 class="pull-right">$24.99</h4>
+                    <h4 class="pull-right">@Model.Product.Price TL</h4>
                     <h4>
-                        <a href="#">Product Name</a>
+                        @Model.Product.Name
                     </h4>
-                    <p>See more snippets like these online store reviews at <a target="_blank" href="http://bootsnipp.com">Bootsnipp - http://bootsnipp.com</a>.</p>
                     <p>
-                        Want to make these reviews work? Check out
-                        <strong>
-                            <a href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">this building a review system tutorial</a>
-                        </strong>over at maxoffsky.com!
+                        @Model.Product.Description
                     </p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
                 </div>
                 <div class="ratings">
-                    <p class="pull-right">3 reviews</p>
+                    <p class="pull-right">@Model.Product.Comments.Count yorum var</p>
                     <p>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star-empty"></span>
+                        @for (int i = 0; i < Model.Product.StarCount; i++)
+                        {
+                            <span class="glyphicon glyphicon-star"></span>
+                        }
+
+                        @for (int i = 0; i < 5 - Model.Product.StarCount; i++)
+                        {
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                        }
                     </p>
                 </div>
             </div>
             <div class="well">
 
                 <div class="row">
-                    <form action="/" method="post">
+                    @using (Html.BeginForm())
+                    {
                         <div class="col-md-3">
-                            <input type="text" class="form-control" placeholder="adınız" />
+                            @Html.TextBoxFor(x => x.CommentOnNickname,
+                                new { @class = "form-control", placeholder = "nickname" })
                         </div>
                         <div class="col-md-7">
-                            <input type="text" class="form-control" placeholder="yorumunuz" />
+                            @Html.TextBoxFor(x => x.CommentOnText,
+                                new { @class = "form-control", placeholder = "comment text" })
                         </div>
                         <div class="col-md-2 text-right">
-                            <a class="btn btn-success">Gönder</a>
+                            <button type="submit" class="btn btn-success">
+                                <span class="glyphicon glyphicon-send"></span> Send
+                            </button>
                         </div>
-                    </form>
+                    }
                 </div>
 
                 <hr>
                 <div class="row">
-                    <div class="col-md-12">
-                        <b>Yorum yazan adı</b>
-                        <span class="pull-right">11.06.2016</span>
-                        <p>This product was great in terms of quality. I would definitely buy another!</p>
-                    </div>
+
+                    @{
+                        List<Comments> comments =
+                            Model.Product.Comments
+                                .Where(x => x.IsValid == true)
+                                .OrderByDescending(x => x.CreatedOn).ToList();
+                    }
+
+                    @foreach (Comments comment in comments)
+                    {
+                        <div class="col-md-12">
+                            <b>@comment.Nickname</b>
+                            <span class="pull-right">@comment.CreatedOn</span>
+                            <p>@comment.Text</p>
+                            <hr />
+                        </div>
+                    }
                 </div>
 
             </div>

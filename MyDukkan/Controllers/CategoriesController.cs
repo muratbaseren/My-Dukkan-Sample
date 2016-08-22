@@ -14,6 +14,16 @@ namespace MyDukkan.Controllers
     {
         private MyDukkanDBEntities db = new MyDukkanDBEntities();
 
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            if (Session["kullanici"] == null)
+            {
+                filterContext.Result = new RedirectResult("/Home/Login");
+            }
+
+            base.OnActionExecuting(filterContext);
+        }
+
         // GET: Categories
         public ActionResult Index()
         {

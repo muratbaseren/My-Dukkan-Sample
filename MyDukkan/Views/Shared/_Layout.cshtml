@@ -34,7 +34,14 @@
                         <a href="/Home/Mesaj">İletişim</a>
                     </li>
                 </ul>
-                @Html.Partial("_LoginMenuItemPartial")
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/Home/Login">
+                            <span class="glyphicon glyphicon-log-in"></span> Login
+                        </a>
+                    </li>
+                </ul>
+                @*@Html.Partial("_LoginMenuItemPartial")*@
             </div>
         </div>
     </div>
@@ -50,7 +57,7 @@
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
 
-    @Html.Partial("_LoginPartial")
+    @*@Html.Partial("_LoginPartial")*@
 </body>
 
 </html>

@@ -18,6 +18,8 @@ namespace MyDukkan
         public string Nickname { get; set; }
         public string Text { get; set; }
         public int ProductId { get; set; }
+        public System.DateTime CreatedOn { get; set; }
+        public bool IsValid { get; set; }
     
         public virtual Products Products { get; set; }
     }

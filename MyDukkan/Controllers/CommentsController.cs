@@ -17,7 +17,7 @@ namespace MyDukkan.Controllers
         // GET: Comments
         public ActionResult Index()
         {
-            var comments = db.Comments.Include(c => c.Products);
+            var comments = db.Comments.Include(c => c.Products).OrderByDescending(x => x.CreatedOn);
             return View(comments.ToList());
         }
 
@@ -50,6 +50,8 @@ namespace MyDukkan.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Nickname,Text,ProductId")] Comments comments)
         {
+            comments.CreatedOn = DateTime.Now;
+
             if (ModelState.IsValid)
             {
                 db.Comments.Add(comments);
@@ -82,16 +84,22 @@ namespace MyDukkan.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nickname,Text,ProductId")] Comments comments)
+        public ActionResult Edit(Comments model)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(comments).State = EntityState.Modified;
+                //db.Entry(comments).State = EntityState.Modified;
+                Comments comment = db.Comments.Find(model.Id);
+                comment.Nickname = model.Nickname;
+                comment.Text = model.Text;
+                comment.ProductId = model.ProductId;
+                comment.IsValid = model.IsValid;
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.ProductId = new SelectList(db.Products, "Id", "Name", comments.ProductId);
-            return View(comments);
+            ViewBag.ProductId = new SelectList(db.Products, "Id", "Name", model.ProductId);
+            return View(model);
         }
 
         // GET: Comments/Delete/5

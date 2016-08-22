@@ -170,7 +170,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AnaSayfaViewModel.cs" />
-    <Compile Include="Models\SysUser.cs" />
+    <Compile Include="Models\UrunDetayViewModel.cs" />
     <Compile Include="MyDukkanDBModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -233,6 +233,7 @@
     <Content Include="Views\SiteUsers\Details.cshtml" />
     <Content Include="Views\SiteUsers\Edit.cshtml" />
     <Content Include="Views\SiteUsers\Index.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

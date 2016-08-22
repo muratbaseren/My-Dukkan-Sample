@@ -13,10 +13,10 @@ namespace MyDukkan
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class MyDukkanDBEntities3 : DbContext
+    public partial class MyDukkanDBEntities : DbContext
     {
-        public MyDukkanDBEntities3()
-            : base("name=MyDukkanDBEntities3")
+        public MyDukkanDBEntities()
+            : base("name=MyDukkanDBEntities")
         {
         }
     
@@ -26,8 +26,8 @@ namespace MyDukkan
         }
     
         public virtual DbSet<Categories> Categories { get; set; }
-        public virtual DbSet<Comments> Comments { get; set; }
         public virtual DbSet<Products> Products { get; set; }
         public virtual DbSet<SiteUsers> SiteUsers { get; set; }
+        public virtual DbSet<Comments> Comments { get; set; }
     }
 }

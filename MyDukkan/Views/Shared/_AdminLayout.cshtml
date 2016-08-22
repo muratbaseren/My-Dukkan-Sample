@@ -39,6 +39,23 @@
                         <a href="/Comments/Index">Comments</a>
                     </li>
                 </ul>
+
+                @{
+                    SiteUsers user = Session["kullanici"] as SiteUsers;
+                }
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/SiteUsers/Details/@user.Id">
+                            <span class="glyphicon glyphicon-user"></span> @user.Name @user.Surname
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Home/SignOut">
+                            <span class="glyphicon glyphicon-log-out"></span> Sign Out
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

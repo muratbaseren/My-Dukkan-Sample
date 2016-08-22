@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MyDukkanDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MyDukkanDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Categories">
           <Key>
             <PropertyRef Name="Id" />
@@ -20,6 +20,8 @@
           <Property Name="Nickname" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="Text" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="IsValid" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Products">
           <Key>
@@ -83,8 +85,7 @@
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MyDukkanDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -95,16 +96,6 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Products" Relationship="Self.FK_Products_Categories" FromRole="Categories" ToRole="Products" />
-        </EntityType>
-        <EntityType Name="Comments">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nickname" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Text" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ProductId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Products" Relationship="Self.FK_Comments_Products" FromRole="Comments" ToRole="Products" />
         </EntityType>
         <EntityType Name="Products">
           <Key>
@@ -119,7 +110,7 @@
           <Property Name="CategoryId" Type="Int32" Nullable="false" />
           <Property Name="ImageFileName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Categories" Relationship="Self.FK_Products_Categories" FromRole="Products" ToRole="Categories" />
-          <NavigationProperty Name="Comments" Relationship="Self.FK_Comments_Products" FromRole="Products" ToRole="Comments" />
+          <NavigationProperty Name="Comments" Relationship="MyDukkanDBModel.FK_Comments_Products" FromRole="Products" ToRole="Comments" />
         </EntityType>
         <EntityType Name="SiteUsers">
           <Key>
@@ -144,9 +135,35 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityContainer Name="MyDukkanDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categories" EntityType="Self.Categories" />
+          <EntitySet Name="Products" EntityType="Self.Products" />
+          <EntitySet Name="SiteUsers" EntityType="Self.SiteUsers" />
+          <AssociationSet Name="FK_Products_Categories" Association="Self.FK_Products_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <EntitySet Name="Comments" EntityType="MyDukkanDBModel.Comments" />
+          <AssociationSet Name="FK_Comments_Products" Association="MyDukkanDBModel.FK_Comments_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Comments">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nickname" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Text" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsValid" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="MyDukkanDBModel.FK_Comments_Products" FromRole="Comments" ToRole="Products" />
+        </EntityType>
         <Association Name="FK_Comments_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
-          <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+          <End Type="MyDukkanDBModel.Products" Role="Products" Multiplicity="1" />
+          <End Type="MyDukkanDBModel.Comments" Role="Comments" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Products">
               <PropertyRef Name="Id" />
@@ -156,41 +173,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="MyDukkanDBEntities3" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Categories" EntityType="Self.Categories" />
-          <EntitySet Name="Comments" EntityType="Self.Comments" />
-          <EntitySet Name="Products" EntityType="Self.Products" />
-          <EntitySet Name="SiteUsers" EntityType="Self.SiteUsers" />
-          <AssociationSet Name="FK_Products_Categories" Association="Self.FK_Products_Categories">
-            <End Role="Categories" EntitySet="Categories" />
-            <End Role="Products" EntitySet="Products" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Comments_Products" Association="Self.FK_Comments_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="Comments" EntitySet="Comments" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="MyDukkanDBModelStoreContainer" CdmEntityContainer="MyDukkanDBEntities3">
+        <EntityContainerMapping StorageEntityContainer="MyDukkanDBModelStoreContainer" CdmEntityContainer="MyDukkanDBEntities">
           <EntitySetMapping Name="Categories">
             <EntityTypeMapping TypeName="MyDukkanDBModel.Categories">
               <MappingFragment StoreEntitySet="Categories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Comments">
-            <EntityTypeMapping TypeName="MyDukkanDBModel.Comments">
-              <MappingFragment StoreEntitySet="Comments">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
-                <ScalarProperty Name="Text" ColumnName="Text" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -217,6 +210,18 @@
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="LastAccess" ColumnName="LastAccess" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Comments">
+            <EntityTypeMapping TypeName="MyDukkanDBModel.Comments">
+              <MappingFragment StoreEntitySet="Comments">
+                <ScalarProperty Name="IsValid" ColumnName="IsValid" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

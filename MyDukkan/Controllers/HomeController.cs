@@ -32,20 +32,86 @@ namespace MyDukkan.Controllers
 
         public ActionResult UrunDetay(Nullable<int> id)
         {
-            SysUser user = new SysUser()
+            if (id == null)
             {
-                Id = 1,
-                Name = "K.Murat",
-                Surname = "Başeren",
-                Email = "kadirmuratbaseren@gmail.com",
-                Username = "muratbaseren"
-            };
+                // id null ise bu hatayı ver.
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+            }
 
-            Session["login"] = user;
+            Products product = db.Products.Find(id);
 
-            // Ürünü bulup model olarak onu göndermelisiniz.
+            if (product == null)
+            {
+                // ürün bulunamazsa ise bu hatayı ver.
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.NotFound);
+            }
 
+            UrunDetayViewModel model = new UrunDetayViewModel();
+            model.Product = product;
+            model.CategoryList = db.Categories.ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult UrunDetay(int? id, UrunDetayViewModel model)
+        {
+            if (id == null)
+            {
+                // id null ise bu hatayı ver.
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+            }
+
+            Products product = db.Products.Find(id);
+
+            if (product == null)
+            {
+                // ürün bulunamazsa ise bu hatayı ver.
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.NotFound);
+            }
+
+            Comments comment = new Comments();
+            comment.Products = product;
+            comment.Nickname = model.CommentOnNickname;
+            comment.CreatedOn = DateTime.Now;
+            comment.Text = model.CommentOnText;
+            comment.IsValid = false;
+
+            db.Comments.Add(comment);
+            db.SaveChanges();
+
+            return RedirectToAction("UrunDetay");
+        }
+
+        public ActionResult Login()
+        {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult Login(SiteUsers model)
+        {
+            SiteUsers user =
+                db.SiteUsers.Where(x =>
+                    x.Email == model.Email &&
+                    x.Password == model.Password).FirstOrDefault();
+
+            if (user == null)
+            {
+                ViewBag.Mesaj = "Geçersiz e-posta ya da şifre";
+                return View(model);
+            }
+
+            Session["kullanici"] = user;
+
+            return RedirectToAction("Index", "Products");
+        }
+
+
+        public ActionResult SignOut()
+        {
+            Session.Clear();
+            return RedirectToAction("AnaSayfa");
         }
     }
 }

@@ -20,5 +20,6 @@ namespace MyDukkan
         public string Email { get; set; }
         public string Password { get; set; }
         public System.DateTime LastAccess { get; set; }
+        public string Permission { get; set; }
     }
 }

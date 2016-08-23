@@ -16,7 +16,7 @@ namespace MyDukkan.Controllers
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (Session["kullanici"] == null)
+            if (Session["admin"] == null)
             {
                 filterContext.Result = new RedirectResult("/Home/Login");
             }

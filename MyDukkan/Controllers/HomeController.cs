@@ -102,7 +102,19 @@ namespace MyDukkan.Controllers
                 return View(model);
             }
 
-            Session["kullanici"] = user;
+            switch (user.Permission.ToLower())
+            {
+                case "admin":
+                    Session["admin"] = user;
+                    break;
+
+                case "kullanici":
+                    Session["kullanici"] = user;
+                    break;
+
+                default:
+                    break;
+            }
 
             return RedirectToAction("Index", "Products");
         }

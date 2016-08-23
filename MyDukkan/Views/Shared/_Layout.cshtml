@@ -35,11 +35,54 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/Home/Login">
-                            <span class="glyphicon glyphicon-log-in"></span> Login
-                        </a>
-                    </li>
+
+                    @if (Session["admin"] != null)
+                    {
+                        <li>
+                            <a href="/SiteUsers/Index">
+                                <span class="glyphicon glyphicon-user"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Products/Index">
+                                <span class="glyphicon glyphicon-cog"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Home/SignOut">
+                                <span class="glyphicon glyphicon-log-out"></span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (Session["kullanici"] != null)
+                    {
+                        <li>
+                            <a href="/User/Profile">
+                                <span class="glyphicon glyphicon-user"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/User/Basket">
+                                <span class="glyphicon glyphicon-shopping-cart"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Home/SignOut">
+                                <span class="glyphicon glyphicon-log-out"></span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (Session["kullanici"] == null && Session["admin"] == null)
+                    {
+                        <li>
+                            <a href="/Home/Login">
+                                <span class="glyphicon glyphicon-log-in"></span> Login
+                            </a>
+                        </li>
+                    }
+                    
                 </ul>
                 @*@Html.Partial("_LoginMenuItemPartial")*@
             </div>

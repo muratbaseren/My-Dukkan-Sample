@@ -27,7 +27,7 @@ namespace MyDukkan
     
         public virtual DbSet<Categories> Categories { get; set; }
         public virtual DbSet<Products> Products { get; set; }
-        public virtual DbSet<SiteUsers> SiteUsers { get; set; }
         public virtual DbSet<Comments> Comments { get; set; }
+        public virtual DbSet<SiteUsers> SiteUsers { get; set; }
     }
 }

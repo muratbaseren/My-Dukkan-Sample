@@ -54,22 +54,28 @@
             <div class="well">
 
                 <div class="row">
-                    @using (Html.BeginForm())
+
+                    @if (Session["kullanici"] != null || Session["admin"] != null)
                     {
-                        <div class="col-md-3">
-                            @Html.TextBoxFor(x => x.CommentOnNickname,
+                        using (Html.BeginForm())
+                        {
+                            @*<div class="col-md-3">
+                                @Html.TextBoxFor(x => x.CommentOnNickname,
                                 new { @class = "form-control", placeholder = "nickname" })
-                        </div>
-                        <div class="col-md-7">
-                            @Html.TextBoxFor(x => x.CommentOnText,
+                            </div>*@
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(x => x.CommentOnText,
                                 new { @class = "form-control", placeholder = "comment text" })
-                        </div>
-                        <div class="col-md-2 text-right">
-                            <button type="submit" class="btn btn-success">
-                                <span class="glyphicon glyphicon-send"></span> Send
-                            </button>
-                        </div>
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <button type="submit" class="btn btn-success">
+                                    <span class="glyphicon glyphicon-send"></span> Send
+                                </button>
+                            </div>
+                        }
                     }
+
+
                 </div>
 
                 <hr>

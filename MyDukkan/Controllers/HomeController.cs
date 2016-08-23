@@ -70,9 +70,21 @@ namespace MyDukkan.Controllers
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.NotFound);
             }
 
+            SiteUsers user = null;
+
+            if(Session["kullanici"] != null)
+            {
+                user = Session["kullanici"] as SiteUsers;
+            }
+
+            if(Session["admin"] != null)
+            {
+                user = Session["admin"] as SiteUsers;
+            }
+
             Comments comment = new Comments();
             comment.Products = product;
-            comment.Nickname = model.CommentOnNickname;
+            comment.Nickname = user.Name + " " + user.Surname;
             comment.CreatedOn = DateTime.Now;
             comment.Text = model.CommentOnText;
             comment.IsValid = false;
@@ -106,17 +118,17 @@ namespace MyDukkan.Controllers
             {
                 case "admin":
                     Session["admin"] = user;
-                    break;
+                    return RedirectToAction("Index", "Products");
 
                 case "kullanici":
                     Session["kullanici"] = user;
-                    break;
+                    return RedirectToAction("AnaSayfa", "Home");
 
                 default:
                     break;
             }
 
-            return RedirectToAction("Index", "Products");
+            return RedirectToAction("AnaSayfa", "Home");
         }
 
 

@@ -114,6 +114,8 @@ namespace MyDukkan.Controllers
                 return View(model);
             }
 
+            Session.Clear();
+
             switch (user.Permission.ToLower())
             {
                 case "admin":

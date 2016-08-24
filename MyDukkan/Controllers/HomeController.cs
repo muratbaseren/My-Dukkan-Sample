@@ -140,42 +140,6 @@ namespace MyDukkan.Controllers
 
 
 
-        public ActionResult AddBasket(int id)
-        {
-            List<Tuple<Products, int>> sepetNesnesi = null;
-
-            // Sepet nesnesi session da varsa onu al yoksa yeni oluştur.
-            if (Session["basket"] != null)
-            {
-                sepetNesnesi = Session["basket"] as List<Tuple<Products, int>>;
-            }
-            else
-            {
-                sepetNesnesi = new List<Tuple<Products, int>>();
-            }
-
-            // Veritabanından sepete eklenecek ürünü bul.
-            Products product = db.Products.Where(x => x.Id == id).FirstOrDefault();
-
-            if (product != null)
-            {
-                Tuple<Products, int> sepet_item =
-                    sepetNesnesi.Where(x => x.Item1.Id == id).FirstOrDefault();
-
-                if (sepet_item != null)
-                {
-                    sepet_item = new Tuple<Products, int>(sepet_item.Item1, sepet_item.Item2 + 1);
-                }
-                else
-                {
-                    sepetNesnesi.Add(new Tuple<Products, int>(product, 1));
-                }
-
-            }
-
-            Session["basket"] = sepetNesnesi;
-
-            return View();
-        }
+        
     }
 }

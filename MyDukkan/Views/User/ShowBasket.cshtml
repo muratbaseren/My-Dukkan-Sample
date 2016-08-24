@@ -1,0 +1,92 @@
+﻿@model List<Tuple<Products, int>>
+
+@{
+    ViewBag.Title = "ShowBasket";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>My Basket</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-12">
+
+        <table class="table table-responsive table-bordered table-hover">
+
+            <tr>
+                <th></th>
+                <th>Product Name</th>
+                <th>Unit Price</th>
+                <th>Count</th>
+                <th>Sub Total</th>
+            </tr>
+
+            @foreach (Tuple<Products, int> item in Model.OrderBy(x =>x.Item1.Name))
+            {
+                <tr>
+                    <td class="table-buttons">
+                        <a href="/User/RemoveBasket/@item.Item1.Id" 
+                           class="btn btn-danger btn-xs hint--top hint--bounce hint--error" 
+                           aria-label="Delete Product from Basket!">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                        <a href="/Home/UrunDetay/@item.Item1.Id"
+                           class="btn btn-info btn-xs hint--top hint--bounce hint--info"
+                           aria-label="Show Product Details!">
+                            <span class="glyphicon glyphicon-info-sign"></span>
+                        </a>
+                        <a href="/Home/UrunDetay/@item.Item1.Id"
+                           class="btn btn-default btn-xs hint--top hint--bounce"
+                           aria-label="Show Product Comments!">
+                            <span class="glyphicon glyphicon-comment"></span>
+                        </a>
+                    </td>
+                    <td>
+                        @item.Item1.Name
+                    </td>
+                    <td>
+                        @item.Item1.Price TL
+                    </td>
+                    <td>
+                        <a href="/User/IncreaseCount/@item.Item1.Id"
+                           class="btn btn-success btn-xs hint--top hint--bounce hint--success"
+                           aria-label="Increase Product Count Value!">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </a>
+                        <b>@item.Item2</b>
+
+                        @if (item.Item2 == 1)
+                        {
+                            <a href="#" disabled="disabled"
+                               class="btn btn-warning btn-xs hint--top hint--bounce hint--warning"
+                               aria-label="Decrease Product Count Value!">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="/User/DecreaseCount/@item.Item1.Id"
+                               class="btn btn-warning btn-xs hint--top hint--bounce hint--warning"
+                               aria-label="Decrease Product Count Value!">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </a>
+                        }
+
+                    </td>
+                    <td>
+                        @(item.Item1.Price * item.Item2) TL
+                    </td>
+                </tr>
+            }
+
+            <tr class="text-danger">
+                <td colspan="4" class="text-right">Total </td>
+                <td>
+                    @Model.Sum(x => x.Item1.Price * x.Item2) TL
+                </td>
+            </tr>
+
+        </table>
+
+    </div>
+</div>

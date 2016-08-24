@@ -63,7 +63,15 @@
                         <div class="thumbnail">
                             <img src="~/images/product.jpg" alt="">
                             <div class="caption">
-                                <h4 class="pull-right">@pro.Price TL</h4>
+                                <h4 class="pull-right">
+
+                                    <a href="/Home/AddBasket/@pro.Id"
+                                            class="btn btn-warning btn-xs hint--bottom hint--warning"
+                                            aria-label="Sepete Ekle">
+                                        <span class="glyphicon glyphicon-shopping-cart"></span> @pro.Price TL
+                                    </a>
+
+                                </h4>
                                 <h4>
                                     <a href="/Home/UrunDetay/@pro.Id">@pro.Name</a>
                                 </h4>
@@ -72,7 +80,19 @@
                                 </p>
                             </div>
                             <div class="ratings">
-                                <p class="pull-right">@pro.Comments.Count yorum</p>
+
+                                @{
+                                    string comment_hint = pro.Comments
+                                            .OrderByDescending(x => x.CreatedOn)
+                                            .Select(x => x.Text).FirstOrDefault();
+
+                                    comment_hint = (string.IsNullOrEmpty(comment_hint)) ? "yorum yok" : comment_hint;
+                                }
+
+                                <p class="pull-right hint--bottom hint--error hint--bounce" 
+                                   aria-label="Son Yorum : @comment_hint">
+                                    @pro.Comments.Count yorum
+                                </p>
                                 <p>
                                     @for (int i = 0; i < pro.StarCount; i++)
                                     {
@@ -87,7 +107,7 @@
                             </div>
                         </div>
                     </div>
-                }
+                                    }
 
             </div>
         </div>

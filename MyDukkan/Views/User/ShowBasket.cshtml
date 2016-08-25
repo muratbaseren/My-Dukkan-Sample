@@ -30,16 +30,80 @@
                            aria-label="Delete Product from Basket!">
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
-                        <a href="/Home/UrunDetay/@item.Item1.Id"
+                        <button type="button" data-toggle="modal"
+                                data-target="#modal_pro_details_@(item.Item1.Id)"
                            class="btn btn-info btn-xs hint--top hint--bounce hint--info"
                            aria-label="Show Product Details!">
                             <span class="glyphicon glyphicon-info-sign"></span>
-                        </a>
-                        <a href="/Home/UrunDetay/@item.Item1.Id"
+                        </button>
+                        <button type="button" 
+                                data-toggle="modal" data-target="#modal_pro_comments_@item.Item1.Id"
                            class="btn btn-default btn-xs hint--top hint--bounce"
                            aria-label="Show Product Comments!">
                             <span class="glyphicon glyphicon-comment"></span>
-                        </a>
+                        </button>
+
+                        <!-- Modal Comment-->
+                        <div class="modal fade" id="modal_pro_comments_@(item.Item1.Id)" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">Yorumlar</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+
+                                            @{
+                                                List<Comments> comments =
+                                                    item.Item1.Comments
+                                                        .Where(x => x.IsValid == true)
+                                                        .OrderByDescending(x => x.CreatedOn).ToList();
+                                            }
+
+                                            @foreach (Comments comment in comments)
+                                            {
+                                                <div class="col-md-12">
+                                                    <b>@comment.Nickname</b>
+                                                    <span class="pull-right">@comment.CreatedOn</span>
+                                                    <p>@comment.Text</p>
+                                                    <hr />
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Detail-->
+                        <div class="modal fade" id="modal_pro_details_@(item.Item1.Id)" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">@item.Item1.Name</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4>Description :</h4>
+                                        <p>
+                                            @item.Item1.Description
+                                        </p>
+                                        <hr />
+                                        <p class="text-danger text-right">
+                                            <b>Price :</b> @item.Item1.Price TL
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </td>
                     <td>
                         @item.Item1.Name
@@ -88,5 +152,26 @@
 
         </table>
 
+    </div>
+</div>
+
+<div class="row" id="address">
+    <div class="col-md-12">
+        Burada adres bilgileri alınır.(Bootstrap panel kullanın)
+    </div>
+</div>
+
+<div class="row" id="creditcard">
+    <div class="col-md-12">
+        Burada kredi kartı bilgileri alınır.(Bootstrap panel kullanın)
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 text-right">
+        <hr />
+        <button type="submit" class="btn btn-success btn-lg">
+            <span class="glyphicon glyphicon-send"></span> Ödeme Yap
+        </button>
     </div>
 </div>

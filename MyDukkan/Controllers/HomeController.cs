@@ -134,6 +134,34 @@ namespace MyDukkan.Controllers
         }
 
 
+        public ActionResult SignUp()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult SignUp(SiteUsers model)
+        {
+            // Girilen e-posta adresi daha önce kayıt olmuş mu kontrol edilir.
+            SiteUsers user = db.SiteUsers.Where(x => x.Email == model.Email).FirstOrDefault();
+
+            // Kullanıcı nesnesi gelirse kayıtlı demektir.
+            if(user != null)
+            {
+                ViewBag.Error = "E-posta adresi zaten mevcuttur.";
+
+                return View(model);
+            }
+
+            model.LastAccess = DateTime.Now;
+            model.Permission = "kullanici";
+
+            db.SiteUsers.Add(model);
+            db.SaveChanges();
+
+            return RedirectToAction("Login");
+        }
+
         public ActionResult SignOut()
         {
             Session.Clear();
@@ -142,6 +170,7 @@ namespace MyDukkan.Controllers
 
 
 
-        
+
+
     }
 }

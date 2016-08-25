@@ -170,5 +170,53 @@ namespace MyDukkan.Controllers
 
             return RedirectToAction("ShowBasket");
         }
+
+        public ActionResult Profil()
+        {
+            SiteUsers user = null;
+
+            if (Session["kullanici"] != null)
+            {
+                user = Session["kullanici"] as SiteUsers;
+            }
+
+            if (Session["admin"] != null)
+            {
+                user = Session["admin"] as SiteUsers;
+            }
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public ActionResult Profil(SiteUsers model)
+        {
+            SiteUsers user = db.SiteUsers.FirstOrDefault(x => x.Id == model.Id);
+
+            if (user != null)
+            {
+                user.LastAccess = DateTime.Now;
+                user.Name = model.Name;
+                user.Surname = model.Surname;
+                user.Password = model.Password;
+
+                db.SaveChanges();
+
+                if(Session["kullanici"] != null)
+                {
+                    Session["kullanici"] = user;
+                }
+
+                if (Session["admin"] != null)
+                {
+                    Session["admin"] = user;
+                }
+
+                ViewBag.Message = "Profiliniz güncellenmiştir.";
+            }
+
+            return View(model);
+        }
+
     }
 }

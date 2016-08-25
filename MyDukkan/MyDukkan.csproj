@@ -242,6 +242,8 @@
     <Content Include="Views\SiteUsers\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\User\ShowBasket.cshtml" />
+    <Content Include="Views\Home\SignUp.cshtml" />
+    <Content Include="Views\User\Profil.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

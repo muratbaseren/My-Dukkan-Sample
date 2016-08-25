@@ -66,8 +66,8 @@
                                 <h4 class="pull-right">
 
                                     <a href="/User/AddBasket/@pro.Id"
-                                            class="btn btn-warning btn-xs hint--bottom hint--warning"
-                                            aria-label="Sepete Ekle">
+                                       class="btn btn-warning btn-xs hint--bottom hint--warning"
+                                       aria-label="Sepete Ekle">
                                         <span class="glyphicon glyphicon-shopping-cart"></span> @pro.Price TL
                                     </a>
 
@@ -78,7 +78,13 @@
                                 <p>
                                     @pro.Summary
                                 </p>
+
                             </div>
+
+                            <div class="addthis_inline_share_toolbox" 
+                                 data-url="@Request.Url.Authority/Home/UrunDetay/@pro.Id">
+                            </div>
+
                             <div class="ratings">
 
                                 @{
@@ -89,7 +95,7 @@
                                     comment_hint = (string.IsNullOrEmpty(comment_hint)) ? "yorum yok" : comment_hint;
                                 }
 
-                                <p class="pull-right hint--bottom hint--error hint--bounce" 
+                                <p class="pull-right hint--bottom hint--error hint--bounce"
                                    aria-label="Son Yorum : @comment_hint">
                                     @pro.Comments.Count yorum
                                 </p>

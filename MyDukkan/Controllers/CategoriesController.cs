@@ -7,18 +7,25 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MyDukkan;
+using System.Web.Caching;
+using MyDukkan.Classes;
 
 namespace MyDukkan.Controllers
 {
-    public class CategoriesController : Controller
+    public class CategoriesController : MyController<Categories>
     {
-        private MyDukkanDBEntities db = new MyDukkanDBEntities();
-
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (Session["admin"] == null)
             {
                 filterContext.Result = new RedirectResult("/Home/Login");
+            }
+            else
+            {
+                if (cm.HasCache() == false)
+                {
+                    cm.Set(db.Categories.ToList());
+                }
             }
 
             base.OnActionExecuting(filterContext);
@@ -27,7 +34,18 @@ namespace MyDukkan.Controllers
         // GET: Categories
         public ActionResult Index()
         {
-            return View(db.Categories.ToList());
+            List<Categories> categories = cm.Get();
+
+            if (categories == null)
+            {
+                // Yoksa veritabanından kategorileri al.
+                categories = db.Categories.ToList();
+
+                // Veriler cache 'e atıldı.
+                cm.Set(categories);
+            }
+
+            return View(categories);
         }
 
         // GET: Categories/Details/5
@@ -37,7 +55,9 @@ namespace MyDukkan.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Categories categories = db.Categories.Find(id);
+
+            Categories categories = cm.GetById(x => x.Id == id);
+
             if (categories == null)
             {
                 return HttpNotFound();
@@ -52,8 +72,6 @@ namespace MyDukkan.Controllers
         }
 
         // POST: Categories/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name")] Categories categories)
@@ -62,6 +80,10 @@ namespace MyDukkan.Controllers
             {
                 db.Categories.Add(categories);
                 db.SaveChanges();
+
+                // Veritabanında veri değiştiği için cache güncellenir.
+                cm.Set(db.Categories.ToList());
+
                 return RedirectToAction("Index");
             }
 
@@ -75,7 +97,9 @@ namespace MyDukkan.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Categories categories = db.Categories.Find(id);
+
+            Categories categories = cm.GetById(x => x.Id == id);
+
             if (categories == null)
             {
                 return HttpNotFound();
@@ -84,8 +108,6 @@ namespace MyDukkan.Controllers
         }
 
         // POST: Categories/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name")] Categories categories)
@@ -94,6 +116,10 @@ namespace MyDukkan.Controllers
             {
                 db.Entry(categories).State = EntityState.Modified;
                 db.SaveChanges();
+
+                // Veritabanında veri değiştiği için cache güncellenir.
+                cm.Set(db.Categories.ToList());
+
                 return RedirectToAction("Index");
             }
             return View(categories);
@@ -106,7 +132,9 @@ namespace MyDukkan.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Categories categories = db.Categories.Find(id);
+
+            Categories categories = cm.GetById(x => x.Id == id);
+
             if (categories == null)
             {
                 return HttpNotFound();
@@ -122,6 +150,10 @@ namespace MyDukkan.Controllers
             Categories categories = db.Categories.Find(id);
             db.Categories.Remove(categories);
             db.SaveChanges();
+
+            // Veritabanında veri değiştiği için cache güncellenir.
+            cm.Set(db.Categories.ToList());
+
             return RedirectToAction("Index");
         }
 

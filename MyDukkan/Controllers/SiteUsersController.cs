@@ -7,13 +7,12 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MyDukkan;
+using MyDukkan.Classes;
 
 namespace MyDukkan.Controllers
 {
-    public class SiteUsersController : Controller
+    public class SiteUsersController : MyController<SiteUsers>
     {
-        private MyDukkanDBEntities db = new MyDukkanDBEntities();
-
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (Session["admin"] == null)

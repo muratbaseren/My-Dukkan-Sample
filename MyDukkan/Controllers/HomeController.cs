@@ -1,4 +1,5 @@
-﻿using MyDukkan.Models;
+﻿using MyDukkan.Classes;
+using MyDukkan.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +8,18 @@ using System.Web.Mvc;
 
 namespace MyDukkan.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : MyController<Categories>
     {
-        private MyDukkanDBEntities db = new MyDukkanDBEntities();
-
-
         public ActionResult AnaSayfa()
         {
             AnaSayfaViewModel model = new AnaSayfaViewModel();
-            model.CategoryList = db.Categories.ToList();
+
+            if (cm.HasCache() == false)
+            {
+                cm.Set(db.Categories.ToList());
+            }
+
+            model.CategoryList = cm.Get();
             model.ProductList = db.Products.ToList();
 
             return View(model);
@@ -24,8 +28,14 @@ namespace MyDukkan.Controllers
         public ActionResult AnaSayfaByCat(int id)
         {
             AnaSayfaViewModel model = new AnaSayfaViewModel();
-            model.CategoryList = db.Categories.ToList();
-            model.ProductList = db.Categories.Find(id).Products.ToList();
+
+            if (cm.HasCache() == false)
+            {
+                cm.Set(db.Categories.ToList());
+            }
+
+            model.CategoryList = cm.Get();
+            model.ProductList = cm.GetById(x => x.Id == id).Products.ToList();
 
             return View("AnaSayfa", model);
         }
@@ -48,7 +58,13 @@ namespace MyDukkan.Controllers
 
             UrunDetayViewModel model = new UrunDetayViewModel();
             model.Product = product;
-            model.CategoryList = db.Categories.ToList();
+
+            if (cm.HasCache() == false)
+            {
+                cm.Set(db.Categories.ToList());
+            }
+
+            model.CategoryList = cm.Get();
 
             return View(model);
         }

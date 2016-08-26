@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyDukkan.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,11 +7,8 @@ using System.Web.Mvc;
 
 namespace MyDukkan.Controllers
 {
-    public class UserController : Controller
+    public class UserController : MyController<Products>
     {
-        private MyDukkanDBEntities db = new MyDukkanDBEntities();
-
-
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (Session["kullanici"] == null && Session["admin"] == null)

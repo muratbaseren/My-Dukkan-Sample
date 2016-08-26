@@ -164,6 +164,8 @@
     <Compile Include="Categories.cs">
       <DependentUpon>MyDukkanDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Classes\CacheManager.cs" />
+    <Compile Include="Classes\MyController.cs" />
     <Compile Include="Comments.cs">
       <DependentUpon>MyDukkanDBModel.tt</DependentUpon>
     </Compile>

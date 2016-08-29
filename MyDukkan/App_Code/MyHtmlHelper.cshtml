@@ -1,0 +1,84 @@
+﻿@using MyDukkan
+
+@helper SlideImageItem(string imageFileName, string altText, bool hasActiveClass = false)
+{
+    if (hasActiveClass)
+    {
+            <div class="item active">
+                <img class="slide-image" src="~/images/@imageFileName" alt="@altText">
+            </div>
+    }
+    else
+    {
+            <div class="item">
+                <img class="slide-image" src="~/images/@imageFileName" alt="@altText">
+            </div>
+    }
+}
+
+
+@helper CreateCarousel()
+{
+    @MyHtmlHelper.CreateCarousel("Img1.jpg", "Img2.jpg", "Img3.jpg", "Img4.jpg");
+}
+
+
+@helper CreateCarousel(params string[] imageFileNames)
+{
+    <div class="row carousel-holder">
+        <div class="col-md-12">
+            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+
+                    @{
+                        int counter = 0;
+                    }
+
+                    @foreach (string fn in imageFileNames)
+                    {
+                        if (counter == 0)
+                        {
+                            @MyHtmlHelper.SlideImageItem(fn, fn, true)
+                        }
+                        else
+                        {
+                            @MyHtmlHelper.SlideImageItem(fn, fn, false)
+                        }
+
+                        counter++;
+                    }
+
+                </div>
+                <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+}
+
+@helper CreateCategories(List<Categories> categoryList)
+{
+    <div class="list-group">
+
+        <a href="/Home/AnaSayfa" class="list-group-item">
+            <b>Tümü</b>
+        </a>
+
+        @foreach (Categories cat in categoryList)
+        {
+            <a href="/Home/AnaSayfaByCat/@cat.Id" class="list-group-item">
+                @cat.Name
+            </a>
+        }
+
+    </div>
+}

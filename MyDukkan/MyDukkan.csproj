@@ -131,6 +131,7 @@
     <Content Include="MyDukkanDBModel.edmx.diagram">
       <DependentUpon>MyDukkanDBModel.edmx</DependentUpon>
     </Content>
+    <Content Include="App_Code\MyHtmlHelper.cshtml" />
     <None Include="Scripts\jquery-2.2.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.4.js" />
     <Content Include="Scripts\jquery-2.2.4.min.js" />

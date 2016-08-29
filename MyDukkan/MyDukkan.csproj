@@ -157,6 +157,7 @@
     <Content Include="shop-item\js\bootstrap.js" />
     <Content Include="shop-item\js\bootstrap.min.js" />
     <Content Include="shop-item\js\jquery.js" />
+    <Content Include="uploads\1468850885_cake.png" />
     <Content Include="Web.config" />
     <Content Include="Views\Home\UrunDetay.cshtml" />
   </ItemGroup>

@@ -57,10 +57,30 @@ namespace MyDukkan.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Price,Summary,Description,StarCount,CategoryId,ImageFileName")] Products products)
+        public ActionResult Create(Products products, HttpPostedFileBase product_image)
         {
             if (ModelState.IsValid)
             {
+                // http://www.muratbaseren.com/uploads/resim1.jpg
+                // c:/inetpub/wwwroot/mysite/uploads/resim1.jpg
+
+                if (System.IO.Directory.Exists(Server.MapPath("~/uploads/")) == false)
+                {
+                    System.IO.Directory.CreateDirectory(Server.MapPath("~/uploads/"));
+                }
+
+                if (product_image != null)
+                {
+                    product_image.SaveAs(Server.MapPath("~/uploads/" + product_image.FileName));
+                    products.ImageFileName = product_image.FileName;
+                }
+
+                if (products.StarCount > 5)
+                    products.StarCount = 5;
+
+                if (products.StarCount < 0)
+                    products.StarCount = 0;
+
                 db.Products.Add(products);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -91,11 +111,29 @@ namespace MyDukkan.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Price,Summary,Description,StarCount,CategoryId,ImageFileName")] Products products)
+        public ActionResult Edit(Products products, HttpPostedFileBase product_image)
         {
             if (ModelState.IsValid)
             {
+                if (System.IO.Directory.Exists(Server.MapPath("~/uploads/")) == false)
+                {
+                    System.IO.Directory.CreateDirectory(Server.MapPath("~/uploads/"));
+                }
+
+                if (product_image != null)
+                {
+                    product_image.SaveAs(Server.MapPath("~/uploads/" + product_image.FileName));
+                    products.ImageFileName = product_image.FileName;
+                }
+
                 db.Entry(products).State = EntityState.Modified;
+
+                if (products.StarCount > 5)
+                    products.StarCount = 5;
+
+                if (products.StarCount < 0)
+                    products.StarCount = 0;
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

@@ -8,28 +8,23 @@ using System.Web;
 using System.Web.Mvc;
 using MyDukkan;
 using MyDukkan.Classes;
+using MyDukkan.Models;
+using MyDukkan.Filters;
 
 namespace MyDukkan.Controllers
 {
+    [Auth, Exc]
     public class SiteUsersController : MyController<SiteUsers>
     {
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            if (Session["admin"] == null)
-            {
-                filterContext.Result = new RedirectResult("/Home/Login");
-            }
 
-            base.OnActionExecuting(filterContext);
-        }
 
-        // GET: SiteUsers
         public ActionResult Index()
         {
+            throw new Exception("Design pattern nedir dediler! :)");
+
             return View(db.SiteUsers.ToList());
         }
 
-        // GET: SiteUsers/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)

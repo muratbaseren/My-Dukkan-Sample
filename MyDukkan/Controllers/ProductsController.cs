@@ -8,29 +8,23 @@ using System.Web;
 using System.Web.Mvc;
 using MyDukkan;
 using MyDukkan.Classes;
+using MyDukkan.Models;
+using MyDukkan.Filters;
 
 namespace MyDukkan.Controllers
 {
+    [Auth, Exc]
     public class ProductsController : MyController<Products>
     {
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            if (Session["admin"] == null)
-            {
-                filterContext.Result = new RedirectResult("/Home/Login");
-            }
 
-            base.OnActionExecuting(filterContext);
-        }
 
-        // GET: Products
         public ActionResult Index()
         {
             var products = db.Products.Include(p => p.Categories);
             return View(products.ToList());
         }
 
-        // GET: Products/Details/5
+
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -45,7 +39,7 @@ namespace MyDukkan.Controllers
             return View(products);
         }
 
-        // GET: Products/Create
+
         public ActionResult Create()
         {
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");

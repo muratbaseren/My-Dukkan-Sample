@@ -9,27 +9,30 @@ using System.Web.Mvc;
 using MyDukkan;
 using System.Web.Caching;
 using MyDukkan.Classes;
+using MyDukkan.Models;
+using MyDukkan.Filters;
 
 namespace MyDukkan.Controllers
 {
+    [Auth,Exc]
     public class CategoriesController : MyController<Categories>
     {
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            if (Session["admin"] == null)
-            {
-                filterContext.Result = new RedirectResult("/Home/Login");
-            }
-            else
-            {
-                if (cm.HasCache() == false)
-                {
-                    cm.Set(db.Categories.ToList());
-                }
-            }
+        //protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        //{
+        //    if (Session["admin"] == null)
+        //    {
+        //        filterContext.Result = new RedirectResult("/Home/Login");
+        //    }
+        //    else
+        //    {
+        //        if (cm.HasCache() == false)
+        //        {
+        //            cm.Set(db.Categories.ToList());
+        //        }
+        //    }
 
-            base.OnActionExecuting(filterContext);
-        }
+        //    base.OnActionExecuting(filterContext);
+        //}
 
         // GET: Categories
         public ActionResult Index()

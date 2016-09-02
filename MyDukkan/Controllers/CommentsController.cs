@@ -8,20 +8,15 @@ using System.Web;
 using System.Web.Mvc;
 using MyDukkan;
 using MyDukkan.Classes;
+using MyDukkan.Models;
+using MyDukkan.Filters;
 
 namespace MyDukkan.Controllers
 {
+    [Auth,Exc]
     public class CommentsController : MyController<Comments>
     {
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            if (Session["admin"] == null)
-            {
-                filterContext.Result = new RedirectResult("/Home/Login");
-            }
-
-            base.OnActionExecuting(filterContext);
-        }
+        
 
         // GET: Comments
         public ActionResult Index()

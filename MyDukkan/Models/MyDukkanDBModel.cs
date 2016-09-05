@@ -11,6 +11,8 @@ namespace MyDukkan
         public DbSet<Comments> Comments { get; set; }
         public DbSet<Products> Products { get; set; }
         public DbSet<SiteUsers> SiteUsers { get; set; }
+        public DbSet<Error> Errors { get; set; }
+        public DbSet<Log> Logs { get; set; }
 
         public MyDukkanDBEntities()
         {

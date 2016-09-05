@@ -13,7 +13,7 @@ using MyDukkan.Filters;
 
 namespace MyDukkan.Controllers
 {
-    [Auth,Exc]
+    [Auth,Exc,Log]
     public class CommentsController : MyController<Comments>
     {
         

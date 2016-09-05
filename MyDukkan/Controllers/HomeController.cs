@@ -1,4 +1,5 @@
 ﻿using MyDukkan.Classes;
+using MyDukkan.Filters;
 using MyDukkan.Models;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Web.Mvc;
 
 namespace MyDukkan.Controllers
 {
+    [Exc,Log]
     public class HomeController : MyController<Categories>
     {
         public ActionResult AnaSayfa()
@@ -162,7 +164,7 @@ namespace MyDukkan.Controllers
             SiteUsers user = db.SiteUsers.Where(x => x.Email == model.Email).FirstOrDefault();
 
             // Kullanıcı nesnesi gelirse kayıtlı demektir.
-            if(user != null)
+            if (user != null)
             {
                 ViewBag.Error = "E-posta adresi zaten mevcuttur.";
 
@@ -185,7 +187,31 @@ namespace MyDukkan.Controllers
         }
 
 
+        public ActionResult Error()
+        {
+            Exception ex = null;
 
+            if (TempData["last_error"] != null)
+            {
+                ex = TempData["last_error"] as Exception;
+            }
+            else
+            {
+                ex = new Exception("Beklenmedik bir hata oluştu.");
+            }
+
+            db.Errors.Add(new Models.Error()
+            {
+                Id = Guid.NewGuid(),
+                OccuredDate = DateTime.Now,
+                Message = ex.Message,
+                StackTrace = ex.StackTrace
+            });
+
+            db.SaveChanges();
+
+            return View(ex);
+        }
 
 
     }

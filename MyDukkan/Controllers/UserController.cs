@@ -1,4 +1,5 @@
 ﻿using MyDukkan.Classes;
+using MyDukkan.Filters;
 using MyDukkan.Models;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Web.Mvc;
 
 namespace MyDukkan.Controllers
 {
+    [Exc, Log]
     public class UserController : MyController<Products>
     {
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -201,7 +203,7 @@ namespace MyDukkan.Controllers
 
                 db.SaveChanges();
 
-                if(Session["kullanici"] != null)
+                if (Session["kullanici"] != null)
                 {
                     Session["kullanici"] = user;
                 }

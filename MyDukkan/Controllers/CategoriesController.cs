@@ -14,7 +14,7 @@ using MyDukkan.Filters;
 
 namespace MyDukkan.Controllers
 {
-    [Auth,Exc]
+    [Auth,Exc,Log]
     public class CategoriesController : MyController<Categories>
     {
         //protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -77,7 +77,7 @@ namespace MyDukkan.Controllers
         // POST: Categories/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] Categories categories)
+        public ActionResult Create( Categories categories)
         {
             if (ModelState.IsValid)
             {
@@ -113,7 +113,7 @@ namespace MyDukkan.Controllers
         // POST: Categories/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name")] Categories categories)
+        public ActionResult Edit(Categories categories)
         {
             if (ModelState.IsValid)
             {

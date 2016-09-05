@@ -48,7 +48,7 @@
             @Html.DisplayFor(modelItem => item.Summary)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Description)
+            @Html.Raw(item.Description)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.StarCount)

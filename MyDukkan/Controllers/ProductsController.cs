@@ -51,37 +51,37 @@ namespace MyDukkan.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public ActionResult Create(Products products, HttpPostedFileBase product_image)
         {
-            if (ModelState.IsValid)
+            if (System.IO.Directory.Exists(Server.MapPath("~/uploads/")) == false)
             {
-                // http://www.muratbaseren.com/uploads/resim1.jpg
-                // c:/inetpub/wwwroot/mysite/uploads/resim1.jpg
-
-                if (System.IO.Directory.Exists(Server.MapPath("~/uploads/")) == false)
-                {
-                    System.IO.Directory.CreateDirectory(Server.MapPath("~/uploads/"));
-                }
-
-                if (product_image != null)
-                {
-                    product_image.SaveAs(Server.MapPath("~/uploads/" + product_image.FileName));
-                    products.ImageFileName = product_image.FileName;
-                }
-
-                if (products.StarCount > 5)
-                    products.StarCount = 5;
-
-                if (products.StarCount < 0)
-                    products.StarCount = 0;
-
-                db.Products.Add(products);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                System.IO.Directory.CreateDirectory(Server.MapPath("~/uploads/"));
             }
 
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", products.CategoryId);
-            return View(products);
+            if (product_image != null)
+            {
+                product_image.SaveAs(Server.MapPath("~/uploads/" + product_image.FileName));
+                products.ImageFileName = product_image.FileName;
+            }
+
+            // http://www.muratbaseren.com/uploads/resim1.jpg
+            // c:/inetpub/wwwroot/mysite/uploads/resim1.jpg
+
+            if (products.StarCount > 5)
+                products.StarCount = 5;
+
+            if (products.StarCount < 0)
+                products.StarCount = 0;
+
+            db.Products.Add(products);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+
+
+            //ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", products.CategoryId);
+            //return View(products);
         }
 
         // GET: Products/Edit/5

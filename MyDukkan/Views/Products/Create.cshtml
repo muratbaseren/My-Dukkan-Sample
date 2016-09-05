@@ -10,7 +10,7 @@
 @using (Html.BeginForm("Create", "Products", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Products</h4>
         <hr />
@@ -42,7 +42,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextAreaFor(model => model.Description, 10, 30, new { @class = "form-control" })
+
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -84,6 +85,20 @@
     @Html.ActionLink("Back to List", "Index")
 </div>
 
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+
+<script>
+
+    $(function () {
+
+        var editor = CKEDITOR.instances["Description"];
+        if (editor) { editor.destroy(true); }
+
+        CKEDITOR.replace("Description", {
+            language: 'tr',
+            enterMode: CKEDITOR.ENTER_BR
+        });
+
+    })
+
+</script>

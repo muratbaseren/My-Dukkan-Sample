@@ -20,7 +20,7 @@ namespace MyDukkan.Controllers
 
         public ActionResult Index()
         {
-            throw new Exception("Design pattern nedir dediler! :)");
+            //throw new Exception("Design pattern nedir dediler! :)");
 
             return View(db.SiteUsers.ToList());
         }

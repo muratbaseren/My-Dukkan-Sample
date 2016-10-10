@@ -10,9 +10,9 @@ namespace MyDukkan.Filters
     {
         public void OnException(ExceptionContext filterContext)
         {
-            filterContext.ExceptionHandled = true;
-            filterContext.Controller.TempData["last_error"] = filterContext.Exception;
-            filterContext.Result = new RedirectResult("/Home/Error");
+            //filterContext.ExceptionHandled = true;
+            //filterContext.Controller.TempData["last_error"] = filterContext.Exception;
+            //filterContext.Result = new RedirectResult("/Home/Error");
         }
     }
 }

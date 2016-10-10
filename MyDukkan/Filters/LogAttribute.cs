@@ -35,18 +35,18 @@ namespace MyDukkan.Filters
                 username = (filterContext.HttpContext.Session["kullanici"] as SiteUsers).Email;
             }
 
-            db.Logs.Add(new Models.Log()
-            {
-                Id = Guid.NewGuid(),
-                AccessDate = DateTime.Now,
-                IP = GetIP(),
-                Username = username,
-                ActionName = filterContext.ActionDescriptor.ActionName,
-                ControllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName,
-                Description = "OnActionExecuted"
-            });
+            //db.Logs.Add(new Models.Log()
+            //{
+            //    Id = Guid.NewGuid(),
+            //    AccessDate = DateTime.Now,
+            //    IP = GetIP(),
+            //    Username = username,
+            //    ActionName = filterContext.ActionDescriptor.ActionName,
+            //    ControllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName,
+            //    Description = "OnActionExecuted"
+            //});
 
-            db.SaveChanges();
+            //db.SaveChanges();
         }
 
         public void OnActionExecuting(ActionExecutingContext filterContext)
@@ -63,17 +63,17 @@ namespace MyDukkan.Filters
                 username = (filterContext.HttpContext.Session["kullanici"] as SiteUsers).Email;
             }
 
-            db.Logs.Add(new Models.Log() {
-                Id = Guid.NewGuid(),
-                AccessDate = DateTime.Now,
-                IP = GetIP(),
-                Username = username,
-                ActionName = filterContext.ActionDescriptor.ActionName,
-                ControllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName,
-                Description = "OnActionExecuting"
-            });
+            //db.Logs.Add(new Models.Log() {
+            //    Id = Guid.NewGuid(),
+            //    AccessDate = DateTime.Now,
+            //    IP = GetIP(),
+            //    Username = username,
+            //    ActionName = filterContext.ActionDescriptor.ActionName,
+            //    ControllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName,
+            //    Description = "OnActionExecuting"
+            //});
 
-            db.SaveChanges();
+            //db.SaveChanges();
         }
     }
 }

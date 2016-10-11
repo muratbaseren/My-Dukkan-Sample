@@ -13,7 +13,7 @@
         </div>
         <div class="col-md-9">
             @MyHtmlHelper.CreateCarousel()
-            
+
             <div class="row">
 
                 @foreach (Products pro in Model.ProductList)
@@ -36,8 +36,8 @@
             <div class="caption">
                 <h4 class="pull-right">
 
-                    <a href="/User/AddBasket/@pro.Id"
-                       class="btn btn-warning btn-xs hint--bottom hint--warning"
+                    <a href="#" data-target="/User/AddBasket/@pro.Id"
+                       class="btn btn-warning btn-xs hint--bottom hint--warning sepetlink"
                        aria-label="Sepete Ekle">
                         <span class="glyphicon glyphicon-shopping-cart"></span> @pro.Price TL
                     </a>
@@ -60,16 +60,18 @@
 
                 @{
                     string comment_hint = pro.Comments
+                            .Where(x => x.IsValid == true)
                             .OrderByDescending(x => x.CreatedOn)
                             .Select(x => x.Text).FirstOrDefault();
 
                     comment_hint = (string.IsNullOrEmpty(comment_hint)) ? "yorum yok" : comment_hint;
                 }
 
-                <p class="pull-right hint--bottom hint--error hint--bounce"
-                   aria-label="Son Yorum : @comment_hint">
-                    @pro.Comments.Count yorum
-                </p>
+                <a class="pull-right hint--bottom hint--error hint--bounce commentlink"
+                   aria-label="Son Yorum : @comment_hint" data-id="@pro.Id"
+                   data-toggle="modal" data-target="#modal_add_comment">
+                    @pro.Comments.Where(x => x.IsValid == true).Count() yorum
+                </a>
                 <p>
                     @for (int i = 0; i < pro.StarCount; i++)
                     {
@@ -85,3 +87,119 @@
         </div>
     </div>
 }
+
+<div class="modal fade" id="modal_add_comment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Yorum Ekle</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <textarea id="txtComment" class="col-md-12" rows="5"></textarea>
+                        <hr />
+                        <button id="btnAddComment" type="button" class="btn btn-success" data-id="-1">
+                            <span class="glyphicon glyphicon-plus"></span> Gönder
+                        </button>
+                        <hr />
+                        <div id="result"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+
+    $(function () {
+
+        // Sayfadaki sepetlink class 'ı içeren tüm a elementlerinin click olayına fonksiyon ata.
+        $("a.sepetlink").click(function () {
+
+            // O an ki a elementinin data-target değerini oku.
+            var link = $(this).data("target");
+
+            // ajax ile data-target değerinden alınan url ye istekte bulun.
+            $.ajax({
+                method: "GET",
+                url: link
+            }).done(function (d) {
+
+                // is not a number
+                if (isNaN(d)) {
+                    window.location = "/Home/Login";
+                }
+
+                // geri dönen json (sepetteki ürün sayısıdır). Sepet simgesi yanına bunu yaz.
+                if (d > 0) {
+                    $("#sepet").html(d + " ürün var");
+                }
+                else {
+                    $("#sepet").empty();
+                }
+
+            }).fail(function () {
+                // Hata oluşursa..
+                alert("Ürün sepete eklenemedi. Sorun oluştu.");
+            });
+
+
+            return false;
+        });
+
+        $("#btnAddComment").click(function () {
+            var comment = $("#txtComment").val();
+            var id = $(this).data("id");
+
+            $.ajax({
+                method: "POST",
+                url: "/Home/UrunDetay/" + id,
+                data: { CommentOnText: comment },
+                beforeSend: function () {
+                    $("#result").attr("class", "");
+                    $("#result").css("display", "none");
+                }
+            }).done(function (d) {
+
+                if (d < 0 && d == -101) {
+                    $("#result").html("Lütfen giriş yapınız..");
+                    $("#result").addClass("alert alert-danger");
+
+                    setTimeout(function () {
+                        window.location = "/Home/Login";
+                    }, 3000);
+                }
+                else {
+                    $("#result").html("Yorum eklenmiştir. Onay beklemektedir.");
+                    $("#result").addClass("alert alert-success");
+                }
+
+            }).fail(function () {
+                $("#result").html("Yorum eklenememiştir. Hata oluştu.");
+                $("#result").addClass("alert alert-danger");
+            }).always(function () {
+                $("#result").fadeIn(300);
+            });
+        });
+
+        $("a.commentlink").click(function () {
+
+            var productId = $(this).data("id");
+            $("#btnAddComment").data("id", productId);
+
+        });
+
+    });
+
+
+</script>

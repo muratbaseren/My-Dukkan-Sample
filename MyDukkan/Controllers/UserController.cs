@@ -68,7 +68,10 @@ namespace MyDukkan.Controllers
             Session["basket"] = sepetNesnesi;
 
             // Seni çağıran sayfa(Request.UrlReferrer) yönlen..
-            return Redirect(Request.UrlReferrer.ToString());
+            //return Redirect(Request.UrlReferrer.ToString());
+            var total = sepetNesnesi.Sum(x => x.Item2);
+
+            return Json(total, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ShowBasket()

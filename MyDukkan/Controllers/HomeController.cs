@@ -100,6 +100,11 @@ namespace MyDukkan.Controllers
                 user = Session["admin"] as SiteUsers;
             }
 
+            if(user == null)
+            {
+                return Json(-101, JsonRequestBehavior.AllowGet);
+            }
+
             Comments comment = new Comments();
             comment.Products = product;
             comment.Nickname = user.Name + " " + user.Surname;
@@ -110,8 +115,10 @@ namespace MyDukkan.Controllers
             db.Comments.Add(comment);
             db.SaveChanges();
 
-            return RedirectToAction("UrunDetay");
+            return Json(comment.Products.Comments.Count, JsonRequestBehavior.AllowGet);
         }
+
+
 
         public ActionResult Login()
         {

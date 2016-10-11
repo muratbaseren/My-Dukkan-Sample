@@ -562,6 +562,7 @@
     <Content Include="Views\Home\SignUp.cshtml" />
     <Content Include="Views\User\Profil.cshtml" />
     <Content Include="Views\Home\Error.cshtml" />
+    <Content Include="Views\Shared\_SepetUrunAdetPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

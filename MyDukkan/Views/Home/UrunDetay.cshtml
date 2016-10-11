@@ -37,7 +37,9 @@
                     </p>
                 </div>
                 <div class="ratings">
-                    <p class="pull-right">@Model.Product.Comments.Count yorum var</p>
+                    <p class="pull-right">
+                        @Model.Product.Comments.Where(x => x.IsValid == true).Count() yorum var
+                    </p>
                     <p>
                         @for (int i = 0; i < Model.Product.StarCount; i++)
                         {
@@ -57,22 +59,35 @@
 
                     @if (Session["kullanici"] != null || Session["admin"] != null)
                     {
-                        using (Html.BeginForm())
-                        {
-                            @*<div class="col-md-3">
-                                @Html.TextBoxFor(x => x.CommentOnNickname,
-                                new { @class = "form-control", placeholder = "nickname" })
-                            </div>*@
-                            <div class="col-md-10">
-                                @Html.TextBoxFor(x => x.CommentOnText,
-                                new { @class = "form-control", placeholder = "comment text" })
-                            </div>
-                            <div class="col-md-2 text-right">
-                                <button type="submit" class="btn btn-success">
-                                    <span class="glyphicon glyphicon-send"></span> Send
-                                </button>
-                            </div>
-                        }
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(x => x.CommentOnText,
+                            new { @class = "form-control", placeholder = "comment text" })
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <button id="btnAddComment" type="button" class="btn btn-success">
+                                <span class="glyphicon glyphicon-send"></span> Send
+                            </button>
+                        </div>
+
+                        <script>
+
+                            $(function () {
+                                $("#btnAddComment").click(function () {
+                                    var comment = $("#CommentOnText").val();
+
+                                    $.ajax({
+                                        method: "POST",
+                                        url: "/Home/UrunDetay/@Model.Product.Id",
+                                        data: { CommentOnText: comment }
+                                    }).done(function (d) {
+                                        alert("Yorum eklenmiştir. Onay beklemektedir.");
+                                    }).fail(function () {
+                                        alert("Yorum eklenemedi. Hata oluştu.");
+                                    });
+                                });
+                            })
+
+                        </script>
                     }
 
 

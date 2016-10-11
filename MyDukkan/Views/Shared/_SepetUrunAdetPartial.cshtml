@@ -1,0 +1,19 @@
+﻿@using MyDukkan.Models
+
+@{
+
+    var adet = 0;
+
+    if (Session["basket"] != null)
+    {
+        List<Tuple<Products, int>> sepet = Session["basket"] as List<Tuple<Products, int>>;
+
+        adet = sepet.Sum(x => x.Item2);
+    }
+
+}
+
+@if(adet > 0)
+{
+    @(adet + " ürün var")
+}
